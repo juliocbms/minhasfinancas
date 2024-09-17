@@ -2,7 +2,6 @@ package com.jbraga.minhasfinancas.model.repository;
 
 import java.util.Optional;
 
-import com.jbraga.minhasfinancas.model.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
