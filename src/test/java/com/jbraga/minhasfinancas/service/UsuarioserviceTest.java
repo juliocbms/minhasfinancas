@@ -11,7 +11,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -21,15 +20,10 @@ import java.util.Optional;
 public class UsuarioserviceTest {
 
     @SpyBean
-     UsuarioServiceImpl service;
+    UsuarioServiceImpl service;
 
     @MockBean
-     UsuarioRepository repository;
-
-    @MockBean
-     PasswordEncoder passwordEncoder;
-
-
+    UsuarioRepository repository;
 
     @Test
     public void deveAutenticarUmUsuarioComSucesso() {
@@ -44,7 +38,6 @@ public class UsuarioserviceTest {
                 .build();
 
         Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(usuario));
-        Mockito.when(passwordEncoder.matches(senha, usuario.getSenha())).thenReturn(true); // Simula a correspondência da senha
 
         // Ação
         Usuario result = service.autenticar(email, senha);
@@ -54,8 +47,6 @@ public class UsuarioserviceTest {
         Assertions.assertEquals(email, result.getEmail(), "O email retornado não corresponde ao esperado");
         Assertions.assertEquals(senha, result.getSenha(), "A senha retornada não corresponde ao esperado");
     }
-
-
 
     @Test
     public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComOEmailInformado() {
@@ -67,55 +58,56 @@ public class UsuarioserviceTest {
             service.autenticar("email@email.com", "senha");
         });
     }
-@Test
-    public void  deveLancarErroQUandoSenhaNaoBater(){
-        //cenário
-    String senha = "senha";
-    Usuario usuario = Usuario.builder().email("email@email.com").senha(senha).build();
-    Mockito.when(repository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
 
-    //ação
-    Assertions.assertThrows(ErroAutenticacao.class, () -> {
-        service.autenticar("email@email.com", "123");
-    });
+    @Test
+    public void deveLancarErroQuandoSenhaNaoBater() {
+        // Cenário
+        String senha = "senha";
+        Usuario usuario = Usuario.builder().email("email@email.com").senha(senha).build();
+        Mockito.when(repository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
+
+        // Ação
+        Assertions.assertThrows(ErroAutenticacao.class, () -> {
+            service.autenticar("email@email.com", "123");
+        });
     }
 
     @Test
-    public void deveSalvarUmUsuario(){
-        //cenario
+    public void deveSalvarUmUsuario() {
+        // Cenário
         Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
         Usuario usuario = Usuario.builder()
-                .id(1l)
+                .id(1L)
                 .nome("nome")
                 .email("email@email.com")
                 .senha("senha")
                 .build();
         Mockito.when(repository.save(Mockito.any(Usuario.class))).thenReturn(usuario);
 
-        //ação
-       Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
+        // Ação
+        Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
 
-       //verificação
+        // Verificação
         Assertions.assertNotNull(usuarioSalvo);
-        Assertions.assertEquals(1l,usuarioSalvo.getId());
-        Assertions.assertEquals("nome",usuarioSalvo.getNome());
-        Assertions.assertEquals("email@email.com",usuarioSalvo.getEmail());
-        Assertions.assertEquals("senha",usuarioSalvo.getSenha());
+        Assertions.assertEquals(1L, usuarioSalvo.getId());
+        Assertions.assertEquals("nome", usuarioSalvo.getNome());
+        Assertions.assertEquals("email@email.com", usuarioSalvo.getEmail());
+        Assertions.assertEquals("senha", usuarioSalvo.getSenha());
     }
 
     @Test
-    public void naoDeveSalvarUmUsuarioCOmEmailJACadastrado(){
-        //cenario
+    public void naoDeveSalvarUmUsuarioComEmailJaCadastrado() {
+        // Cenário
         String email = "email@email.com";
         Usuario usuario = Usuario.builder().email("email@email.com").build();
         Mockito.doThrow(RegraNegocioException.class).when(service).validarEmail(email);
 
-        //ação
+        // Ação
         Assertions.assertThrows(RegraNegocioException.class, () -> {
             service.salvarUsuario(usuario);
         });
 
-        //verificação
+        // Verificação
         Mockito.verify(repository, Mockito.never()).save(usuario);
     }
 
