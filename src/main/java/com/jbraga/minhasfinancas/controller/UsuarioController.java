@@ -6,6 +6,7 @@ import com.jbraga.minhasfinancas.exception.ErroAutenticacao;
 import com.jbraga.minhasfinancas.exception.RegraNegocioException;
 import com.jbraga.minhasfinancas.model.entity.Usuario;
 import com.jbraga.minhasfinancas.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    private UsuarioService service;
-
-    @Autowired
-    public UsuarioController(UsuarioService service) {
-        this.service = service;
-    }
+    private final UsuarioService service;
 
     @PostMapping("/autenticar")
     public ResponseEntity autenticar(@RequestBody UsuarioDTO dto){

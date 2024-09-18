@@ -3,10 +3,7 @@ package com.jbraga.minhasfinancas.model.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
 import jakarta.persistence.*;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-
 import com.jbraga.minhasfinancas.model.enums.StatusLancamento;
 import com.jbraga.minhasfinancas.model.enums.TipoLancamento;
 
@@ -45,8 +42,7 @@ public class Lancamento {
     private BigDecimal valor;
 
     @Column(name = "data_cadastro", nullable = false)
-    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
-    private LocalDate dataCadastro;
+    private LocalDate dataCadastro = LocalDate.now(); // Inicialize com a data atual, se apropriado
 
     @Column(name = "tipo", nullable = false)
     @Enumerated(value = EnumType.STRING)
