@@ -76,16 +76,16 @@ atualizar(lancamento);
             throw new RegraNegocioException("Informe um mês válido.");
         }
         if (lancamento.getAno() == null || lancamento.getAno().toString().length() !=4){
-            throw  new RegraNegocioException("Informe um ANo válido.");
+            throw  new RegraNegocioException("Informe um ano válido.");
         }
-        if (lancamento.getUsuario() == null || lancamento.getUsuario() == null){
-            throw new RegraNegocioException("Informe um usuário");
+        if (lancamento.getUsuario() == null || lancamento.getUsuario().getId() == null){
+            throw new RegraNegocioException("Informe um usuário.");
         }
         if (lancamento.getValor() == null || lancamento.getValor().compareTo(BigDecimal.ZERO) < 1){
             throw new RegraNegocioException("Informe um valor válido.");
         }
         if (lancamento.getTipo() == null){
-            throw new RegraNegocioException("Informe um tipo de Lançamento.");
+            throw new RegraNegocioException("Informe um tipo de lançamento.");
         }
     }
 

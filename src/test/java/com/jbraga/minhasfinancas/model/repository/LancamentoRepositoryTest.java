@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -85,7 +86,48 @@ public class LancamentoRepositoryTest {
         Assertions.assertNull(lancamentoInexistente);
     }
 
-    private Lancamento criarLancamento() {
+    @Test
+    public void deveAtualizarUmLancamento() {
+        Lancamento lancamento = criarEPersistirUmLancamento();
+
+        lancamento.setAno(2018);
+        lancamento.setDescricao("Teste Atualizar");
+        lancamento.setStatus(StatusLancamento.CANCELADO);
+
+        repository.save(lancamento);
+
+        Lancamento lancamentoAtualizado = entityManager.find(Lancamento.class, lancamento.getId());
+
+        Assertions.assertEquals(lancamentoAtualizado.getAno(), 2018);
+        Assertions.assertEquals(lancamentoAtualizado.getDescricao(), "Teste Atualizar");
+        Assertions.assertEquals(lancamentoAtualizado.getStatus(), StatusLancamento.CANCELADO);
+    }
+
+    @Test
+    public  void deveBuscarUmLancamentoPorId(){
+        Lancamento lancamento = criarEPersistirUmLancamento();
+
+       Optional<Lancamento> lancamentoEncontrado = repository.findById(lancamento.getId());
+
+       Assertions.assertTrue(lancamentoEncontrado.isPresent());
+    }
+
+    private Lancamento criarEPersistirUmLancamento() {
+        Usuario usuario = Usuario.builder()
+                .nome("Usuario teste")
+                .email("usuario@teste.com")
+                .senha("123")
+                .build();
+
+        usuario = entityManager.persist(usuario);
+
+        Lancamento lancamento = criarLancamento();
+        lancamento.setUsuario(usuario);  // Associando o usuário ao lançamento
+        entityManager.persist(lancamento);
+        return lancamento;
+    }
+
+   public static Lancamento criarLancamento() {
         return Lancamento.builder()
                 .ano(2019)
                 .mes(1)
