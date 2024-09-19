@@ -2,8 +2,9 @@ package com.jbraga.minhasfinancas.model.repository;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -37,7 +38,7 @@ public class UsuarioRepositoryTest {
         boolean result = repository.existsByEmail("usuario@email.com");
 
         //verificacao
-        Assertions.assertThat(result).isTrue();
+        Assertions.assertTrue(result);
 
     }
 
@@ -50,7 +51,7 @@ public class UsuarioRepositoryTest {
         boolean result = repository.existsByEmail("usuario@email.com");
 
         //verificação
-        Assertions.assertThat(result).isFalse();
+        Assertions.assertFalse(result);
     }
 
 @Test
@@ -60,7 +61,7 @@ public  void devePersistirUmUsuarioNaBasedeDAdos(){
     //ação
    Usuario usuarioSalvo = repository.save(usuario);
 //verificação
-   Assertions.assertThat(usuarioSalvo.getId()).isNotNull();
+   Assertions.assertNotNull(usuarioSalvo.getId());
 }
 
 @Test
@@ -73,7 +74,7 @@ public void deveBuscarUmUsuarioPorEmail(){
     Optional<Usuario> result= repository.findByEmail("usuario@email.com");
 
     //ação
-    Assertions.assertThat(result.isPresent()).isTrue();
+    Assertions.assertTrue(result.isPresent());
 }
     @Test
     public void deveRetornarVazioaoBuscarUsuarioProEmailQUandoNaoExisteNaBase(){
@@ -83,7 +84,7 @@ public void deveBuscarUmUsuarioPorEmail(){
         Optional<Usuario> result= repository.findByEmail("usuario@email.com");
 
         //ação
-        Assertions.assertThat(result.isPresent()).isFalse();
+        Assertions.assertFalse(result.isPresent());
     }
 
     public static Usuario criarUsuario() {

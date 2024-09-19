@@ -3,6 +3,7 @@ package com.jbraga.minhasfinancas.service.impl;
 import com.jbraga.minhasfinancas.exception.RegraNegocioException;
 import com.jbraga.minhasfinancas.model.entity.Lancamento;
 import com.jbraga.minhasfinancas.model.enums.StatusLancamento;
+import com.jbraga.minhasfinancas.model.enums.TipoLancamento;
 import com.jbraga.minhasfinancas.model.repository.LancamentoRepository;
 import com.jbraga.minhasfinancas.service.LancamentoService;
 import org.springframework.data.domain.Example;
@@ -91,5 +92,23 @@ atualizar(lancamento);
     @Override
     public Optional<Lancamento> obterPorId(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal obterSaldoPorUsuario(Long id) {
+
+        BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuarioEStatus(id, TipoLancamento.RECEITA, StatusLancamento.EFETIVADO);
+        BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuarioEStatus(id, TipoLancamento.DESPESA, StatusLancamento.EFETIVADO);
+
+      if (receitas == null){
+          receitas = BigDecimal.ZERO;
+      }
+
+      if (despesas == null){
+          despesas = BigDecimal.ZERO;
+      }
+
+        return receitas.subtract(despesas);
     }
 }
