@@ -87,6 +87,9 @@ atualizar(lancamento);
         if (lancamento.getTipo() == null){
             throw new RegraNegocioException("Informe um tipo de lançamento.");
         }
+        if (lancamento.getNome() == null || lancamento.getNome().trim().equals("")){
+            throw new RegraNegocioException("Informe um nome lançamento.");
+        }
     }
 
     @Override

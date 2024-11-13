@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 public class LancamentoDTO {
 
     private  Long id;
-    String descricao;
+    private String descricao;
+    private String nome;
     private  Integer mes;
     private  Integer ano;
     private BigDecimal valor;

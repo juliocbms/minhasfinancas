@@ -20,6 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/lancamentos")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class LancamentoController {
 
     private final LancamentoService service;
@@ -27,12 +28,14 @@ public class LancamentoController {
 
     @GetMapping
     public ResponseEntity<?> buscar(
+            @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "descricao", required = false) String descricao,
             @RequestParam(value = "mes", required = false) Integer mes,
             @RequestParam(value = "ano", required = false) Integer ano,
             @RequestParam("usuario") Long idUsuario
     ) {
         Lancamento lancamentoFiltro = new Lancamento();
+        lancamentoFiltro.setNome(nome);
         lancamentoFiltro.setDescricao(descricao);
         lancamentoFiltro.setMes(mes);
         lancamentoFiltro.setAno(ano);
@@ -57,7 +60,7 @@ public class LancamentoController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/atualizar")
     public ResponseEntity<?> atualizar(@PathVariable("id") Long id, @RequestBody LancamentoDTO dto) {
         return service.obterPorId(id).map(entity -> {
             try {
@@ -108,6 +111,7 @@ try {
         lancamento.setAno(dto.getAno());
         lancamento.setMes(dto.getMes());
         lancamento.setValor(dto.getValor());
+        lancamento.setNome(dto.getNome());
 
         Usuario usuario = usuarioService
                 .obterPorId(dto.getUsuario())

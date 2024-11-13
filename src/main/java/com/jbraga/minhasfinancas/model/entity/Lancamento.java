@@ -34,6 +34,9 @@ public class Lancamento {
     @Column(name = "ano", nullable = false)
     private Integer ano;
 
+    @Column(name = "nome", nullable = false)
+    private String nome;
+
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
