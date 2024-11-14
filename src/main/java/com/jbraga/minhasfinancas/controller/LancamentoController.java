@@ -118,7 +118,8 @@ try {
         lancamento.setDia(dto.getDia());
         lancamento.setValor(dto.getValor());
         lancamento.setNome(dto.getNome());
-        lancamento.setDataCadastro(LocalDate.parse(dto.getDataCadastro()));
+        lancamento.setDataCadastro(dto.getDataCadastro());
+        lancamento.setDatalancamento(dto.getDatalancamento());
 
         Usuario usuario = usuarioService
                 .obterPorId(dto.getUsuario())

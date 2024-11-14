@@ -3,6 +3,7 @@ package com.jbraga.minhasfinancas.model.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import com.jbraga.minhasfinancas.model.enums.StatusLancamento;
 import com.jbraga.minhasfinancas.model.enums.TipoLancamento;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "lancamento", schema = "financas")
@@ -47,14 +49,19 @@ public class Lancamento {
     @Column(name = "valor", nullable = false)
     private BigDecimal valor;
 
+
+    @Column(name = "data_lancamento", nullable = false)
+    private LocalDate datalancamento;
+
+    @CreationTimestamp
     @Column(name = "data_cadastro", nullable = false)
-    private LocalDate dataCadastro; // Inicialize com a data atual, se apropriado
+    private LocalDate dataCadastro = LocalDate.now(); // Inicialize com a data atual, se apropriado
 
     @Column(name = "tipo", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private TipoLancamento tipo;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = true)
     @Enumerated(value = EnumType.STRING)
     private StatusLancamento status;
 }
