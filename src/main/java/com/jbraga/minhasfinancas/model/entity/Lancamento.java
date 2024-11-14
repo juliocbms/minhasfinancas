@@ -34,6 +34,9 @@ public class Lancamento {
     @Column(name = "ano", nullable = false)
     private Integer ano;
 
+    @Column(name = "dia", nullable = false)
+    private Integer dia;
+
     @Column(name = "nome", nullable = false)
     private String nome;
 
@@ -45,7 +48,7 @@ public class Lancamento {
     private BigDecimal valor;
 
     @Column(name = "data_cadastro", nullable = false)
-    private LocalDate dataCadastro = LocalDate.now(); // Inicialize com a data atual, se apropriado
+    private LocalDate dataCadastro; // Inicialize com a data atual, se apropriado
 
     @Column(name = "tipo", nullable = false)
     @Enumerated(value = EnumType.STRING)

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,8 @@ public class LancamentoController {
             @RequestParam(value = "descricao", required = false) String descricao,
             @RequestParam(value = "mes", required = false) Integer mes,
             @RequestParam(value = "ano", required = false) Integer ano,
+            @RequestParam(value = "dia", required = false) Integer dia,
+            @RequestParam(value = "dataCadastro", required = false) String dataCadastro,
             @RequestParam("usuario") Long idUsuario
     ) {
         Lancamento lancamentoFiltro = new Lancamento();
@@ -39,6 +42,8 @@ public class LancamentoController {
         lancamentoFiltro.setDescricao(descricao);
         lancamentoFiltro.setMes(mes);
         lancamentoFiltro.setAno(ano);
+        lancamentoFiltro.setDia(dia);
+        lancamentoFiltro.setDataCadastro(LocalDate.parse(dataCadastro));
 
         Optional<Usuario> usuario = usuarioService.obterPorId(idUsuario);
         if (usuario.isEmpty()) {
@@ -110,8 +115,10 @@ try {
         lancamento.setDescricao(dto.getDescricao());
         lancamento.setAno(dto.getAno());
         lancamento.setMes(dto.getMes());
+        lancamento.setDia(dto.getDia());
         lancamento.setValor(dto.getValor());
         lancamento.setNome(dto.getNome());
+        lancamento.setDataCadastro(LocalDate.parse(dto.getDataCadastro()));
 
         Usuario usuario = usuarioService
                 .obterPorId(dto.getUsuario())

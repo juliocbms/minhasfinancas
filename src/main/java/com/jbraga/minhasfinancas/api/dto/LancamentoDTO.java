@@ -14,9 +14,11 @@ public class LancamentoDTO {
     private String nome;
     private  Integer mes;
     private  Integer ano;
+    private  Integer dia;
     private BigDecimal valor;
     private  Long usuario;
     private String tipo;
     private  String status;
+    private String dataCadastro;
 
 }
