@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,10 @@ public class LancamentoController {
             @RequestParam(value = "ano", required = false) Integer ano,
             @RequestParam(value = "dia", required = false) Integer dia,
             @RequestParam(value = "dataCadastro", required = false) String dataCadastro,
-            @RequestParam("usuario") Long idUsuario
+            @RequestParam(value = "dataLancamento", required = false) String dataLancamento,
+            @RequestParam(value = "valor", required = false) BigDecimal valor,
+            @RequestParam(value = "usuario", required = false) Long idUsuario,
+            @RequestParam(value = "tipo", required = false) TipoLancamento tipo
     ) {
         Lancamento lancamentoFiltro = new Lancamento();
         lancamentoFiltro.setNome(nome);
@@ -43,7 +47,21 @@ public class LancamentoController {
         lancamentoFiltro.setMes(mes);
         lancamentoFiltro.setAno(ano);
         lancamentoFiltro.setDia(dia);
-        lancamentoFiltro.setDataCadastro(LocalDate.parse(dataCadastro));
+        lancamentoFiltro.setValor(valor);
+
+        if (dataCadastro != null && !dataCadastro.isEmpty()) {
+            lancamentoFiltro.setDataCadastro(LocalDate.parse(dataCadastro));
+        } else {
+            // Tratar caso dataCadastro seja inválido
+            System.out.println("Data de cadastro inválida.");
+        }
+
+        if (dataLancamento != null && !dataLancamento.isEmpty()) {
+            lancamentoFiltro.setDatalancamento(LocalDate.parse(dataLancamento));
+        } else {
+            // Tratar caso dataLancamento seja inválido
+            System.out.println("Data de lançamento inválida.");
+        }
 
         Optional<Usuario> usuario = usuarioService.obterPorId(idUsuario);
         if (usuario.isEmpty()) {
@@ -53,6 +71,7 @@ public class LancamentoController {
         List<Lancamento> lancamentos = service.buscar(lancamentoFiltro);
         return ResponseEntity.ok(lancamentos);
     }
+
 
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody LancamentoDTO dto) {
