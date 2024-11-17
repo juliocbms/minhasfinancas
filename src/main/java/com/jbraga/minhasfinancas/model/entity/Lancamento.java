@@ -51,10 +51,12 @@ public class Lancamento {
 
 
     @Column(name = "data_lancamento", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate datalancamento;
 
     @CreationTimestamp
     @Column(name = "data_cadastro", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataCadastro = LocalDate.now(); // Inicialize com a data atual, se apropriado
 
     @Column(name = "tipo", nullable = false)
