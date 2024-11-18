@@ -41,14 +41,6 @@ public class LancamentoController {
             @RequestParam(value = "usuario", required = false) Long idUsuario,
             @RequestParam(value = "tipo", required = false) TipoLancamento tipo
     ) {
-        try {
-            // Adiciona um atraso de 5 segundos
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restaura o estado de interrupção
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao processar requisição.");
-        }
 
         Lancamento lancamentoFiltro = new Lancamento();
         lancamentoFiltro.setNome(nome);
