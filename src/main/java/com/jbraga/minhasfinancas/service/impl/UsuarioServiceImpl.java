@@ -2,6 +2,7 @@ package com.jbraga.minhasfinancas.service.impl;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +15,13 @@ import com.jbraga.minhasfinancas.service.UsuarioService;
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
+    private final PasswordEncoder encoder;
     private UsuarioRepository repository;
 
-    public UsuarioServiceImpl(UsuarioRepository repository) {
+    public UsuarioServiceImpl(UsuarioRepository repository, PasswordEncoder encoder) {
         super();
         this.repository = repository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -29,7 +32,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new ErroAutenticacao("Usuário não encontrado para o email informado.");
         }
 
-        if(!senha.equals(usuario.get().getSenha())) {
+       boolean senhasBatem = encoder.matches(senha,usuario.get().getSenha());
+
+        if(!senhasBatem) {
             throw new ErroAutenticacao("Senha inválida.");
         }
 
@@ -40,7 +45,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public Usuario salvarUsuario(Usuario usuario) {
         validarEmail(usuario.getEmail());
+        criptografarSenha(usuario);
         return repository.save(usuario);
+    }
+
+    private void criptografarSenha(Usuario usuario){
+        String senha = usuario.getSenha();
+        String senhaCripto = encoder.encode(senha);
+        usuario.setSenha(senhaCripto);
     }
 
     @Override
