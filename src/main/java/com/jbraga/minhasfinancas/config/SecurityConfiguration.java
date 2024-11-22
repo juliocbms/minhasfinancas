@@ -26,8 +26,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -46,6 +48,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable()) // Desativa o CSRF
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios/autenticar").permitAll() // Permitir acesso público
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll() // Permitir acesso público
                         .anyRequest().authenticated() // Exigir autenticação para qualquer outra requisição
@@ -79,6 +82,7 @@ public class SecurityConfiguration {
     public FilterRegistrationBean<CorsFilter> corsFilter(){
 
         List<String> all = Arrays.asList(new String[]{"*"});
+
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedMethods(all);
         config.setAllowedOrigins(all);
@@ -88,11 +92,13 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
+        CorsFilter corFilter = new CorsFilter();
 
-        CorsFilter corsfilter = new CorsFilter();
-        FilterRegistrationBean<CorsFilter> filter = new FilterRegistrationBean<CorsFilter>(corsfilter);
+        FilterRegistrationBean<CorsFilter> filter =
+                new FilterRegistrationBean<CorsFilter>(corFilter);
         filter.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         return filter;
     }
+
 }

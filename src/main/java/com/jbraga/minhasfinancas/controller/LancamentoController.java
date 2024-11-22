@@ -22,7 +22,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/lancamentos")
 @RequiredArgsConstructor
-@CrossOrigin("*")
+
 public class LancamentoController {
 
     private final LancamentoService service;
