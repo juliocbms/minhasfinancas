@@ -36,20 +36,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String authorization = request.getHeader("Authorization");
 
-        if (authorization != null && authorization.startsWith("Bearer")){
-
+        if (authorization != null && authorization.startsWith("Bearer")) {
             String token = authorization.split(" ")[1];
+            System.out.println("Token recebido: " + token);  // Log do token
             boolean isTokenValid = jwtService.isTokenValido(token);
 
-            if (isTokenValid){
+            if (isTokenValid) {
                 String login = jwtService.obterLoginUsuraio(token);
-               UserDetails usuarioAutenticado = userDatailsService.loadUserByUsername(login);
+                UserDetails usuarioAutenticado = userDatailsService.loadUserByUsername(login);
                 UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(
                         usuarioAutenticado, null, usuarioAutenticado.getAuthorities());
-                user.setDetails(new WebAuthenticationDetailsSource().buildDetails(request) );
+                user.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(user);
-
-
+            } else {
+                System.out.println("Token inválido ou expirado.");
             }
         }
         filterChain.doFilter(request, response);

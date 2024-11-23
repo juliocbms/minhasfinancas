@@ -19,11 +19,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api/lancamentos")
 @RequiredArgsConstructor
-
 public class LancamentoController {
 
     private final LancamentoService service;
