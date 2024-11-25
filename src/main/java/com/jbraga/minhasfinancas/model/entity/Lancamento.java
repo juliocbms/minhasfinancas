@@ -57,7 +57,7 @@ public class Lancamento {
     @CreationTimestamp
     @Column(name = "data_cadastro", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate dataCadastro = LocalDate.now(); // Inicialize com a data atual, se apropriado
+    private LocalDate dataCadastro = LocalDate.now();
 
     @Column(name = "tipo", nullable = false)
     @Enumerated(value = EnumType.STRING)

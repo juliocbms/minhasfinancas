@@ -32,7 +32,7 @@ public class LancamentoRepositoryTest {
 
     @Test
     public void deveSalvarUmLancamento() {
-        // Persistindo um usuário
+
         Usuario usuario = Usuario.builder()
                 .nome("Usuario teste")
                 .email("usuario@teste.com")
@@ -41,7 +41,7 @@ public class LancamentoRepositoryTest {
 
         usuario = entityManager.persist(usuario);
 
-        // Criando e persistindo um lançamento
+
         Lancamento lancamento = Lancamento.builder()
                 .ano(2019)
                 .mes(1)
@@ -50,18 +50,18 @@ public class LancamentoRepositoryTest {
                 .status(StatusLancamento.PENDENTE)
                 .dataCadastro(LocalDate.now())
                 .tipo(TipoLancamento.RECEITA)
-                .usuario(usuario)  // Associando o usuário ao lançamento
+                .usuario(usuario)
                 .build();
 
         lancamento = repository.save(lancamento);
 
-        // Verificando se o ID do lançamento não é nulo
+
         Assertions.assertNotNull(lancamento.getId());
     }
 
     @Test
     public void deveDeletarUmLancamento() {
-        // Persistindo um usuário
+
         Usuario usuario = Usuario.builder()
                 .nome("Usuario teste")
                 .email("usuario@teste.com")
@@ -70,18 +70,18 @@ public class LancamentoRepositoryTest {
 
         usuario = entityManager.persist(usuario);
 
-        // Criando e persistindo um lançamento
+
         Lancamento lancamento = criarLancamento();
-        lancamento.setUsuario(usuario);  // Associando o usuário ao lançamento
+        lancamento.setUsuario(usuario);
         lancamento = entityManager.persist(lancamento);
 
-        // Carregando o lançamento para garantir que ele está no contexto de persistência
+
         lancamento = entityManager.find(Lancamento.class, lancamento.getId());
 
-        // Deletando o lançamento
+
         repository.delete(lancamento);
 
-        // Verificando se o lançamento foi deletado
+
         Lancamento lancamentoInexistente = entityManager.find(Lancamento.class, lancamento.getId());
         Assertions.assertNull(lancamentoInexistente);
     }
@@ -122,7 +122,7 @@ public class LancamentoRepositoryTest {
         usuario = entityManager.persist(usuario);
 
         Lancamento lancamento = criarLancamento();
-        lancamento.setUsuario(usuario);  // Associando o usuário ao lançamento
+        lancamento.setUsuario(usuario);
         entityManager.persist(lancamento);
         return lancamento;
     }

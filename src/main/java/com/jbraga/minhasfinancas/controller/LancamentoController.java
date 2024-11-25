@@ -55,14 +55,14 @@ public class LancamentoController {
         if (dataCadastro != null && !dataCadastro.isEmpty()) {
             lancamentoFiltro.setDataCadastro(LocalDate.parse(dataCadastro));
         } else {
-            // Tratar caso dataCadastro seja inválido
+
             System.out.println("Data de cadastro inválida.");
         }
 
         if (dataLancamento != null && !dataLancamento.isEmpty()) {
             lancamentoFiltro.setDatalancamento(LocalDate.parse(dataLancamento));
         } else {
-            // Tratar caso dataLancamento seja inválido
+
             System.out.println("Data de lançamento inválida.");
         }
 

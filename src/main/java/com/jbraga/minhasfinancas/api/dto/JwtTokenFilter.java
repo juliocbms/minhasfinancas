@@ -38,7 +38,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         if (authorization != null && authorization.startsWith("Bearer")) {
             String token = authorization.split(" ")[1];
-            System.out.println("Token recebido: " + token);  // Log do token
+            System.out.println("Token recebido: " + token);
             boolean isTokenValid = jwtService.isTokenValido(token);
 
             if (isTokenValid) {

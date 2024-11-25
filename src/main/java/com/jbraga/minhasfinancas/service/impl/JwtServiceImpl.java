@@ -35,6 +35,7 @@ public class JwtServiceImpl implements JwtService {
                 .setExpiration(data)
                 .setSubject(usuario.getEmail())
                 .claim("nome",usuario.getNome())
+                .claim("usuario",usuario.getId() )
                 .claim("horaExpiracao", dataHoraExpiracao.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")))
                 .signWith(SignatureAlgorithm.HS256, chaveAssinatura)
                 .compact();
@@ -43,10 +44,10 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Claims obterClaims(String token) throws ExpiredJwtException {
         return Jwts
-                .parser()  // Use parserBuilder() ao invés de parser()
+                .parser()
                 .setSigningKey(chaveAssinatura)
                 .build()
-                .parseClaimsJws(token)  // Use parseClaimsJws ao invés de parseClaimsJwt
+                .parseClaimsJws(token)
                 .getBody();
     }
 
