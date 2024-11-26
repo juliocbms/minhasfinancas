@@ -3,6 +3,8 @@ package com.jbraga.minhasfinancas.config;
 import com.jbraga.minhasfinancas.api.dto.JwtTokenFilter;
 import com.jbraga.minhasfinancas.service.JwtService;
 import com.jbraga.minhasfinancas.service.impl.SecurityUserDetailsService;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class SecurityConfiguration {
 
     @Autowired
@@ -42,7 +45,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios/autenticar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "swagger-ui/**", "swagger-ui.html", "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios","**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

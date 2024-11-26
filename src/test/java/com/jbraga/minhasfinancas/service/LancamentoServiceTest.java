@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.Example;
@@ -35,10 +36,10 @@ import com.jbraga.minhasfinancas.model.repository.LancamentoRepository;
 import com.jbraga.minhasfinancas.model.repository.LancamentoRepositoryTest;
 import com.jbraga.minhasfinancas.service.impl.LancamentoServiceImpl;
 
-@ExtendWith(SpringExtension.class)
+
 @ActiveProfiles("test")
-@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
 public class LancamentoServiceTest {
 
     @SpyBean
@@ -218,6 +219,17 @@ public class LancamentoServiceTest {
 
         lancamento.setMes(1);
 
+        // Verifica a validação do dia
+        lancamento.setDia(-1);
+        erro = assertThrows(RegraNegocioException.class, () -> service.validar(lancamento));
+        assertEquals("Informe um dia válido.", erro.getMessage());
+
+        lancamento.setDia(32);
+        erro = assertThrows(RegraNegocioException.class, () -> service.validar(lancamento));
+        assertEquals("Informe um dia válido.", erro.getMessage());
+
+        lancamento.setDia(15);
+
         // Verifica a validação do ano
         lancamento.setAno(0);
         erro = assertThrows(RegraNegocioException.class, () -> service.validar(lancamento));
@@ -244,10 +256,11 @@ public class LancamentoServiceTest {
         lancamento.setValor(BigDecimal.valueOf(1));
 
         // Verifica a validação do tipo de lançamento
-        lancamento.setTipo(null); // Set tipo de lançamento para null para acionar erro
+        lancamento.setTipo(null);
         erro = assertThrows(RegraNegocioException.class, () -> service.validar(lancamento));
         assertEquals("Informe um tipo de lançamento.", erro.getMessage());
     }
+
 
 
 

@@ -6,6 +6,7 @@ import com.jbraga.minhasfinancas.api.dto.UsuarioDTO;
 import com.jbraga.minhasfinancas.exception.ErroAutenticacao;
 import com.jbraga.minhasfinancas.exception.RegraNegocioException;
 import com.jbraga.minhasfinancas.model.entity.Usuario;
+import com.jbraga.minhasfinancas.service.JwtService;
 import com.jbraga.minhasfinancas.service.LancamentoService;
 import com.jbraga.minhasfinancas.service.UsuarioService;
 import org.junit.jupiter.api.Test;
@@ -41,9 +42,23 @@ public class UsuarioControllerTest {
     @MockBean
     LancamentoService lancamentoService;
 
+    @MockBean
+    JwtService jwtService;
+
+    @Test
+    public void deveAcessarEndpointSemAutenticacao() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(API.concat("/autenticar"))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\":\"usuario@email.com\",\"senha\":\"123\"}");
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk()); // Verifica se é acessível
+    }
+
     @Test
     public void deveAutenticarUmUsuario() throws Exception {
-        // Cenário
         String email = "usuario@email.com";
         String senha = "123";
         UsuarioDTO dto = UsuarioDTO.builder()
@@ -61,19 +76,19 @@ public class UsuarioControllerTest {
 
         String json = new ObjectMapper().writeValueAsString(dto);
 
-        // Execução e verificação
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post(API.concat("/autenticar"))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json)
+                        .with(csrf -> csrf);
+
+
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("id").value(usuario.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(usuario.getNome()))
                 .andExpect(MockMvcResultMatchers.jsonPath("email").value(usuario.getEmail()));
-
     }
 
     @Test

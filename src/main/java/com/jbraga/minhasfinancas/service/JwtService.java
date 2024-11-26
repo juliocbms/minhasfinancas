@@ -3,7 +3,9 @@ package com.jbraga.minhasfinancas.service;
 import com.jbraga.minhasfinancas.model.entity.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface JwtService {
 
     String gerarToken(Usuario usuario);

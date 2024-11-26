@@ -2,12 +2,16 @@ package com.jbraga.minhasfinancas.model.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 
 @Entity
 @Table( name = "usuario" , schema = "financas")
@@ -32,5 +36,9 @@ public class Usuario {
 @JsonIgnore
     private String senha;
 
+    @CreationTimestamp
+    @Column(name = "data_cadastro", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dataCadastro = LocalDate.now();
 
 }

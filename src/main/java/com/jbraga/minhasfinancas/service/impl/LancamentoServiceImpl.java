@@ -75,7 +75,7 @@ atualizar(lancamento);
         if (lancamento.getMes() == null || lancamento.getMes()<1 || lancamento.getMes()>12){
             throw new RegraNegocioException("Informe um mês válido.");
         }
-        if (lancamento.getDia() == null || lancamento.getDia()<0 || lancamento.getDia()>32){
+        if (lancamento.getDia() == null || lancamento.getDia()<0 || lancamento.getDia()>31){
             throw new RegraNegocioException("Informe um dia válido.");
         }
         if (lancamento.getAno() == null || lancamento.getAno().toString().length() !=4){
